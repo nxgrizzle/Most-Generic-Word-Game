@@ -1,0 +1,37 @@
+.circle {
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+  font-weight: bold;
+}
+.circle--required {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background-color: #bccad0;
+  border-radius: 50%;
+  margin: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.5rem;
+}
+
+.circle--optional {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: #e3e8ea;
+  font-size: 3rem;
+  border-radius: 100px;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}

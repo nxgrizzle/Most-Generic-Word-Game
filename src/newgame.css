@@ -1,0 +1,73 @@
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  padding: 3px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.1s ease;
+  text-align: center;
+}
+.btn:hover {
+  transform: scale(1.05);
+}
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.modal-container.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.modal {
+  position: relative;
+  padding: 5%;
+  width: 500px;
+  max-width: 500px;
+  background-color: white;
+}
+
+.grid {
+  display: grid;
+}
+.grid--three {
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 3px;
+  padding: 5px;
+  transition: 0.1s ease;
+  cursor: pointer;
+  text-align: center;
+}
+.grid-item:hover {
+  transform: scale(1.05);
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 1rem;
+  width: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
