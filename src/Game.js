@@ -22,6 +22,7 @@ export default function Game() {
     const [game, setGame] = useState({showAnswers:false, validWords:[], letters:[], usedWords:[], score:0, maxScore:0, requiredLetter:"", currentWord:"" , message:""})
     useEffect(()=>{importPangram(7)},[])
     useEffect(()=>console.log(game),[game])
+
     const [width, height] = useWindowSize()
     const [menu, setMenu] = useState(false)
     const isPangram = (word) => game.letters.every(letter=> word.split("").includes(letter))
@@ -59,6 +60,8 @@ export default function Game() {
             const pangrams = pangramList.split("\r\n")
             const words = wordList.split("\n")
             // get a random number, and choose the pangram
+            console.log(words)
+            console.log(pangrams)
             const pNumber = Math.floor(Math.random() * pangrams.length)
             const pangram = pangrams[pNumber]
             // set the letters
