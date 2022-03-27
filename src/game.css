@@ -45,7 +45,6 @@ p {
   .used {
     margin-top: 5px;
     order: 1;
-    overflow-y: auto;
     height: 1.75rem;
   }
   .opened {

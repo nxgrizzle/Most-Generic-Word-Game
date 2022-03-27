@@ -57,7 +57,7 @@ export default function Game() {
         fetch(txt).then(r=>r.text()), 
         fetch(dict).then(r=>r.text())])
         .then(([pangramList, wordList])=>{
-            const pangrams = pangramList.split("\n") // if in bugtesting, this has to be '/r/n'
+            const pangrams = pangramList.split("\n") // if in bugtesting, this has to be '\r\n'
             const words = wordList.split("\n")
             // get a random number, and choose the pangram
             console.log(words)
@@ -158,7 +158,7 @@ export default function Game() {
             <LettersUI setCurrentWord={setCurrentWord} circles={game.letters}/>
         </div>}
         <div className={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
-            {width < 1000 && <div style={{position:"absolute", top:0, right:5, fontWeight:"bold"}} 
+            {width < 1000 && <div style={{position:"absolute", top:0, right:5, fontWeight:"bold", cursor:"pointer"}} 
             onClick={toggleMenu}>{menu ? "ᐃ" : "ᐁ"}</div>}
             <ul className="used-words">
             {game.usedWords.map(word=>{
