@@ -21,6 +21,7 @@ import Options from './Options'
 export default function Game() {
     const [game, setGame] = useState({showAnswers:false, validWords:[], letters:[], usedWords:[], score:0, maxScore:0, requiredLetter:"", currentWord:"" , message:""})
     useEffect(()=>{importPangram(7)},[])
+    useEffect(()=>console.log(game),[game])
     const [width, height] = useWindowSize()
     const [menu, setMenu] = useState(false)
     const isPangram = (word) => game.letters.every(letter=> word.split("").includes(letter))
@@ -153,12 +154,12 @@ export default function Game() {
         {game.letters && <div class="letters-container">
             <LettersUI setCurrentWord={setCurrentWord} circles={game.letters}/>
         </div>}
-        <div class={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
+        <div className={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
             {width < 1000 && <div style={{position:"absolute", top:0, right:5, fontWeight:"bold"}} 
             onClick={toggleMenu}>{menu ? "ᐃ" : "ᐁ"}</div>}
-            <ul class="used-words">
+            <ul className="used-words">
             {game.usedWords.map(word=>{
-                return <li class="used-words-li" style={{fontWeight:"bold"}}>{word.toLowerCase()}</li>
+                return <li className="used-words-li" style={{fontWeight:"bold"}}>{word.toLowerCase()}</li>
             })}
             </ul>
         </div>
