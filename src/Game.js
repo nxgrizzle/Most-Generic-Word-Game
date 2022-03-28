@@ -76,7 +76,7 @@ export default function Game() {
         fetch(txt).then(r=>r.text()), 
         fetch(dict).then(r=>r.text())])
         .then(([pangramList, wordList])=>{
-            const pangrams = pangramList.split("\r\n") // if in bugtesting, this has to be '\r\n'
+            const pangrams = pangramList.split("\n") // if in bugtesting, this has to be '\r\n'
             const words = wordList.split("\n")
             // get a random number, and choose the pangram
             console.log(words)
