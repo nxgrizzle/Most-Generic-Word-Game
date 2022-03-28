@@ -40,7 +40,7 @@ export default function Text(props) {
     // also, how to update a p class in an appropriate way
     return (
         <>
-        <div class="message-container" style={{height:"1rem", margin:"0.25rem 0 0.75rem 0"}}>
+        <div className="message-container" style={{height:"1rem", margin:"0.25rem 0 0.75rem 0"}}>
         <p>{props.message}</p>
         </div>
         <div className="input-container">

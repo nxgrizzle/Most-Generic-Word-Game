@@ -16,14 +16,32 @@ import { getActiveElement } from '@testing-library/user-event/dist/utils'
 // do some styling
 // then done tbh
 // just make it mobiel friendly
+// and newgame screen would be a bull thing with a grid for each row stacked
+// add hints
 
 // no highlight
-// wtf why hover 
-export default function Game() {
-    const [game, setGame] = useState({showAnswers:false, validWords:[], letters:[], usedWords:[], score:0, maxScore:0, requiredLetter:"", currentWord:"" , message:""})
-    useEffect(()=>{importPangram(7)},[])
-    useEffect(()=>console.log(game),[game])
+// wtf why hover
+// on mobile views, add a hamburger that shows header and p info
 
+// good lord i need to do some sectioning off lmao
+export default function Game() {
+    const [game, setGame] = useState({showAnswers:false, validWords:[], letters:[], usedWords:[], score:0, 
+        maxScore:0, requiredLetter:"", currentWord:"" , message:"", showHint:false, hint:""})
+    useEffect(()=>{importPangram(7)},[])
+    useEffect(()=>{
+        if(game.showHint){
+            // get unused words
+            const unusedWords = game.validWords.filter(word=>!game.usedWords.includes(word))
+            // get word endings and get word beginnings
+            console.log(unusedWords)
+            const hints = unusedWords.reduce((acc,curr)=>{
+                acc[curr.substring(2)] = acc[curr.slice(2)]  ? acc[curr.slice(2)]  + 1 : 0
+                acc[curr.substring(-2)] = acc[curr.slice(-2)] ? acc[curr.slice(-2)] + 1 : 0
+                return acc
+            },{})
+            const int = Math.random() * hints.keys().length
+        }
+    },[game.showHint, game.usedWords])
     const [width, height] = useWindowSize()
     const [menu, setMenu] = useState(false)
     const isPangram = (word) => game.letters.every(letter=> word.split("").includes(letter))
@@ -58,7 +76,7 @@ export default function Game() {
         fetch(txt).then(r=>r.text()), 
         fetch(dict).then(r=>r.text())])
         .then(([pangramList, wordList])=>{
-            const pangrams = pangramList.split("\n") // if in bugtesting, this has to be '\r\n'
+            const pangrams = pangramList.split("\r\n") // if in bugtesting, this has to be '\r\n'
             const words = wordList.split("\n")
             // get a random number, and choose the pangram
             console.log(words)
@@ -83,7 +101,7 @@ export default function Game() {
             })
             // one point per letter, +10 for pangram
             const maxScore = validWords.reduce((acc,curr)=>acc+curr.length,10)
-            setGame({showAnswers:false, usedWords:[],validWords:validWords, letters:letters, requiredLetter:requiredLetter, maxScore:maxScore, score:0, currentWord:"", message:""})
+            setGame({showAnswers:false, usedWords:[],validWords:validWords, letters:letters, requiredLetter:requiredLetter, maxScore:maxScore, score:0, currentWord:"", message:"", hint:"",showHint:false})
         })
     }
     const handleEnter = () =>{
@@ -141,6 +159,9 @@ export default function Game() {
     const toggleMenu = () =>{
         setMenu(prev=>!prev)
     }
+    const toggleHint = () =>{
+        setGame(prev=>({...prev, showHint:!game.showHint}))
+    }
   return (
     <div style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column"}}>
         <Header toggleAnswers={toggleAnswers} showAnswers={game.showAnswers} newGame={importPangram}/>
@@ -167,7 +188,7 @@ export default function Game() {
               toggleAnswers={toggleAnswers} showAnswers={game.showAnswers}/>
         
         <div className="game-container">
-        {game.letters && <div class="letters-container">
+        {game.letters && <div className="letters-container">
             <LettersUI setCurrentWord={setCurrentWord} circles={game.letters} width={width}/>
         </div>}
         {width >= 1000 && <div className={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
@@ -181,8 +202,10 @@ export default function Game() {
         </div>}
         </div>
         <div className="options-container" style={{display:"grid", gridGap:"5px", gridTemplateColumns:"repeat(3,1fr)", margin:"10px 0"}}>
-            <Options shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord} />
+            <Options toggleHint={toggleHint} shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord} />
         </div>
+        {game.showHint && game.validWords.map(word=> !game.usedWords.includes(word)).map(word=>{
+            return <div><p></p></div>})}
         {game.showAnswers && <div className="words-container answer">
             <h3>Answers</h3>
             <ul class="answers">
