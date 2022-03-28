@@ -1,7 +1,6 @@
 import React from 'react'
 import FlipMove from 'react-flip-move'
 import './lettersui.css'
-import { useState, useEffect, useRef } from 'react'
 export default function LettersUI(props) {
 
     // the enter animation is buggy bc it does its own magic with absolute positioning
@@ -12,7 +11,6 @@ export default function LettersUI(props) {
     /* 
     I could do something where I have a fade-in CSS thing, then add that class on animation start
     */
-   const requiredRef = useRef()
     const stopPropagation = (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -37,7 +35,7 @@ export default function LettersUI(props) {
             const radius = 150
             const parent = document.getElementsByClassName("circle--required")[0]
             const parentOffset = parseInt(parent.offsetWidth/2)
-            const childOffset = 50
+            const childOffset = props.width < 1000 ? 50 : 60
             const offset = parentOffset-childOffset
             const y = Math.sin(((Math.PI)/2)+(div * (index+1)) * (Math.PI / 180)) * radius*-1;
             const x = Math.cos(((Math.PI)/2)+(div * (index+1)) * (Math.PI / 180)) * radius*-1;

@@ -9,6 +9,7 @@ import LettersUI from './LettersUI'
 import Header from './Header'
 import Text from './Text'
 import Options from './Options'
+import { getActiveElement } from '@testing-library/user-event/dist/utils'
 
 // add a show/hide answers thing
 // add that button
@@ -124,12 +125,13 @@ export default function Game() {
         const usedWords = game.usedWords
         
         usedWords.push(game.currentWord)
+        usedWords.sort()
             // add points, usedWords
             // clear currentWord, set message to something nice
         setGame(prev=>({...prev, currentWord:"", score:score,  usedWords:usedWords}))
         }
     const setMessage = (message) =>{
-        if(message !== game.message) setGame(prev=>({...prev, message:message}))
+        setGame(prev=>({...prev, message:message}))
     }
     // add bar for used words like generic word game
     // add header
@@ -142,8 +144,19 @@ export default function Game() {
   return (
     <div style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column"}}>
         <Header toggleAnswers={toggleAnswers} showAnswers={game.showAnswers} newGame={importPangram}/>
-        <p>You have found {game.usedWords.length} word(s).</p>
+        {width >= 1000 && <><p>You are in {game.letters.length === 6 ? "Easy" : game.letters.length === 7 ? "Normal" : "Hard"} Mode</p>
+        <p>You must find words that have at least {game.letters.length-3} letters in them.</p></>}
+        <p>You have found {game.usedWords.length} word{game.usedWords.length===1?"":"s"} out of {game.validWords.length}.</p>
         <p>Score: {game.score}/{game.maxScore}.</p>
+        {width < 1000 && <div className={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
+            {width < 1000 && <div style={{position:"absolute", top:0, right:"5px", fontWeight:"bold", cursor:"pointer"}} 
+            onClick={toggleMenu}>{menu ? "ᐃ" : "ᐁ"}</div>}
+            <ul className="used-words">
+            {game.usedWords.map(word=>{
+                return <li className="used-words-li" style={{fontWeight:"bold"}}>{word.toLowerCase()}</li>
+            })}
+            </ul>
+        </div>}
         <Text clearCurrentWord={clearCurrentWord} 
               setCurrentWord={setCurrentWord} submitWord={submitWord} 
               validWords={game.validWords} usedWords={game.usedWords} 
@@ -151,13 +164,13 @@ export default function Game() {
               current={game.currentWord} requiredLetter={game.requiredLetter} 
               shuffle={shuffle} message={game.message} 
               setMessage={setMessage} handleEnter={handleEnter}
-              toggleAnswers={toggleAnswers} showAnswers={game.shwoAnswers}/>
+              toggleAnswers={toggleAnswers} showAnswers={game.showAnswers}/>
         
         <div className="game-container">
         {game.letters && <div class="letters-container">
-            <LettersUI setCurrentWord={setCurrentWord} circles={game.letters}/>
+            <LettersUI setCurrentWord={setCurrentWord} circles={game.letters} width={width}/>
         </div>}
-        <div className={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
+        {width >= 1000 && <div className={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
             {width < 1000 && <div style={{position:"absolute", top:0, right:5, fontWeight:"bold", cursor:"pointer"}} 
             onClick={toggleMenu}>{menu ? "ᐃ" : "ᐁ"}</div>}
             <ul className="used-words">
@@ -165,7 +178,7 @@ export default function Game() {
                 return <li className="used-words-li" style={{fontWeight:"bold"}}>{word.toLowerCase()}</li>
             })}
             </ul>
-        </div>
+        </div>}
         </div>
         <div className="options-container" style={{display:"grid", gridGap:"5px", gridTemplateColumns:"repeat(3,1fr)", margin:"10px 0"}}>
             <Options shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord} />

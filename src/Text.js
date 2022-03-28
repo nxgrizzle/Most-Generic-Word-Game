@@ -6,7 +6,6 @@ export default function Text(props) {
     //make it so it always focuses after interaction
     const handleKeyDown = (e) =>{
         const letter = e.key
-        console.log(letter)
         if(props.letters.includes(letter.toUpperCase())){
             props.setCurrentWord(letter.toUpperCase())
             props.setMessage("")
@@ -21,6 +20,7 @@ export default function Text(props) {
         }
         // else if check space to shuffle
         else if (letter===" "){
+            e.preventDefault()
             props.shuffle()
         }
         // else if check esc to show answers
@@ -40,11 +40,13 @@ export default function Text(props) {
     // also, how to update a p class in an appropriate way
     return (
         <>
+        <div class="message-container" style={{height:"1rem", margin:"0.25rem 0 0.75rem 0"}}>
         <p>{props.message}</p>
-    <div className="input-container">
-        <div className="text">{props.current.toLowerCase()}</div>
-        <span className="blink"></span>
-    </div>
+        </div>
+        <div className="input-container">
+            <div className="text" style={{verticalAlign:"top", height:"1rem", margin:"1.5rem 0"}}>{props.current.toLowerCase()}</div>
+            <span className="blink"></span>
+        </div>
     </>
   )
 }
