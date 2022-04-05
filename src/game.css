@@ -35,6 +35,15 @@ p {
   padding: 0;
   margin: 2px;
 }
+
+.dropdown {
+  transition: 0.3s ease;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
 @media screen and (max-width: 1000px) {
   .game-container {
     grid-template-columns: auto;
@@ -46,6 +55,13 @@ p {
     margin-top: 5px;
     height: 1.75rem;
     max-width: 450px;
+  }
+  .small-full {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90vw;
+    font-weight: bold;
   }
   .opened {
     height: 350px;

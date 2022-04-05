@@ -6,7 +6,7 @@ export default function Options(props) {
         <div onClick={()=>props.setCurrentWord("Backspace")}className="btn">Backspace</div>
         <div onClick={props.shuffle}className="btn">Shuffle</div>
         <div onClick={props.handleEnter}className="btn">Enter</div>
-        <div onClick={props.toggleHint} className="btn">Hint</div>
+        <div onClick={props.toggleHint} className="btn">{props.showHint? "Hide" : "Show"} Hint</div>
       </>
   )
 }

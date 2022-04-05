@@ -44,7 +44,7 @@ export default function Text(props) {
         <p>{props.message}</p>
         </div>
         <div className="input-container">
-            <div className="text" style={{verticalAlign:"top", height:"1rem", margin:"1.5rem 0"}}>{props.current.toLowerCase()}</div>
+            <div className="text" style={{verticalAlign:"top", height:"1rem"}}>{props.current.toLowerCase()}</div>
             <span className="blink"></span>
         </div>
     </>

@@ -19,7 +19,7 @@ export default function NewGame(props) {
     <>
         <div className="btn" onClick={e=>addModal(e)}>New Game</div>
         <div onClick={e=>removeModal(e)}className={`modal-container ${modal ? "active" : ""}`}>
-            <div className="modal grid grid--three">
+            <div className={`modal grid ${props.width < 1000 ? "grid--one" : "grid--three"}`}>
                 <div className="close" onClick={e=>removeModal(e)}>X</div>
                 <div onClick={()=>toggleGame(6)} className="grid-item">
                     <p>You have 6 letters.</p>

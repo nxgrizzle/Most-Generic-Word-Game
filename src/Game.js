@@ -9,7 +9,6 @@ import LettersUI from './LettersUI'
 import Header from './Header'
 import Text from './Text'
 import Options from './Options'
-import { getActiveElement } from '@testing-library/user-event/dist/utils'
 
 // add a show/hide answers thing
 // add that button
@@ -27,20 +26,33 @@ import { getActiveElement } from '@testing-library/user-event/dist/utils'
 export default function Game() {
     const [game, setGame] = useState({showAnswers:false, validWords:[], letters:[], usedWords:[], score:0, 
         maxScore:0, requiredLetter:"", currentWord:"" , message:"", showHint:false, hint:""})
-    useEffect(()=>{importPangram(7)},[])
-    useEffect(()=>{
-        if(game.showHint){
-            // get unused words
+    const generateHint = () =>{
+                    // get unused words
             const unusedWords = game.validWords.filter(word=>!game.usedWords.includes(word))
             // get word endings and get word beginnings
-            console.log(unusedWords)
-            const hints = unusedWords.reduce((acc,curr)=>{
-                acc[curr.substring(2)] = acc[curr.slice(2)]  ? acc[curr.slice(2)]  + 1 : 0
-                acc[curr.substring(-2)] = acc[curr.slice(-2)] ? acc[curr.slice(-2)] + 1 : 0
-                return acc
-            },{})
-            const int = Math.random() * hints.keys().length
-        }
+            const begPhrase = "at the beginning."
+            const endPhrase = "at the end."
+            const hints = {}
+            for(const num in unusedWords) {
+                const word = unusedWords[num]
+                const begString = `"${word.slice(0,2).toLowerCase()}" ${begPhrase}`
+                const endString = `"${word.slice(-2).toLowerCase()}" ${endPhrase}`
+                hints[begString] = hints[begString] + 1 || 1
+                hints[endString] = hints[endString] + 1 || 1
+            }
+            const keys = Object.keys(hints)
+            const num = Math.floor(Math.random() * keys.length)
+            const phrase = keys[num]
+            const number = hints[phrase]
+            console.log(num, phrase, number)
+            const fullString = `There ${number >= 2 ? "are" : "is"} still ${number} word${number >=2 ?"s" : ""} that ha${number >= 2 ? "ve" : "s"} ${phrase}`
+            console.log(fullString)
+            setGame(prev=>({...prev, hint:fullString}))
+    }
+    useEffect(()=>{importPangram(7)},[])
+    useEffect(()=>{
+            generateHint()
+        
     },[game.showHint, game.usedWords])
     const [width, height] = useWindowSize()
     const [menu, setMenu] = useState(false)
@@ -76,7 +88,7 @@ export default function Game() {
         fetch(txt).then(r=>r.text()), 
         fetch(dict).then(r=>r.text())])
         .then(([pangramList, wordList])=>{
-            const pangrams = pangramList.split("\n") // if in bugtesting, this has to be '\r\n'
+            const pangrams = pangramList.split("\r\n") // if in bugtesting, this has to be '\r\n'
             const words = wordList.split("\n")
             // get a random number, and choose the pangram
             console.log(words)
@@ -163,15 +175,17 @@ export default function Game() {
         setGame(prev=>({...prev, showHint:!game.showHint}))
     }
   return (
-    <div style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column"}}>
-        <Header toggleAnswers={toggleAnswers} showAnswers={game.showAnswers} newGame={importPangram}/>
+    <div className="full" style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column"}}>
+        <Header toggleAnswers={toggleAnswers} showAnswers={game.showAnswers} newGame={importPangram} width={width}/>
         {width >= 1000 && <><p>You are in {game.letters.length === 6 ? "Easy" : game.letters.length === 7 ? "Normal" : "Hard"} Mode</p>
         <p>You must find words that have at least {game.letters.length-3} letters in them.</p></>}
+        {width < 1000 && <div className="small-full"><p>{game.letters.length === 6 ? "Easy" : game.letters.length === 7 ? "Normal" : "Hard"} Mode</p>
+        <p>Min: {game.letters.length-3} letters</p></div>}
         <p>You have found {game.usedWords.length} word{game.usedWords.length===1?"":"s"} out of {game.validWords.length}.</p>
         <p>Score: {game.score}/{game.maxScore}.</p>
         {width < 1000 && <div className={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
-            {width < 1000 && <div style={{position:"absolute", top:0, right:"5px", fontWeight:"bold", cursor:"pointer"}} 
-            onClick={toggleMenu}>{menu ? "ᐃ" : "ᐁ"}</div>}
+            {width < 1000 && <div className={`${menu ? "rotated" : ""} dropdown`} style={{position:"absolute", top:0, right:"5px", fontWeight:"bold", cursor:"pointer"}} 
+            onClick={toggleMenu}>ᐁ</div>}
             <ul className="used-words">
             {game.usedWords.map(word=>{
                 return <li className="used-words-li" style={{fontWeight:"bold"}}>{word.toLowerCase()}</li>
@@ -202,10 +216,9 @@ export default function Game() {
         </div>}
         </div>
         <div className="options-container" style={{display:"grid", gridGap:"5px", gridTemplateColumns:"repeat(3,1fr)", margin:"10px 0"}}>
-            <Options toggleHint={toggleHint} shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord} />
+            <Options showHint={game.showHint} toggleHint={toggleHint} shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord} />
         </div>
-        {game.showHint && game.validWords.map(word=> !game.usedWords.includes(word)).map(word=>{
-            return <div><p></p></div>})}
+        {game.showHint && <><p style={{textAlign:"center"}}>{game.hint}</p><div className="btn" onClick={generateHint}>Generate New Hint</div></>}
         {game.showAnswers && <div className="words-container answer">
             <h3>Answers</h3>
             <ul class="answers">
