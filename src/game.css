@@ -1,9 +1,8 @@
 .game-container {
   display: grid;
   grid-template-columns: repeat(2, auto);
-  grid-gap: 10px;
-  justify-content: "center";
-  align-items: "center";
+  grid-gap: 20px;
+  margin-top: 1rem;
 }
 
 .game-container > * {
@@ -23,12 +22,13 @@
 }
 .used {
   border: 2px solid black;
-  height: 350px;
-  width: 80vw;
-  max-width: 700px;
+  height: 410px;
+  width: 65vw;
+  max-width: 550px;
   border-radius: 5px;
   overflow: hidden;
   transition: 0.275s ease;
+  margin-left: 2vw;
 }
 
 p {

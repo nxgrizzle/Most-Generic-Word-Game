@@ -215,7 +215,7 @@ export default function Game() {
             </ul>
         </div>}
         </div>
-        <div className="options-container" style={{display:"grid", gridGap:"5px", gridTemplateColumns:"repeat(3,1fr)", margin:"10px 0"}}>
+        <div className="options-container" style={{display:"grid", gridGap:"5px", gridTemplateColumns:"repeat(3,1fr)", margin:`${width<1000? "0" : "10px 0"}`}}>
             <Options showHint={game.showHint} toggleHint={toggleHint} shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord} />
         </div>
         {game.showHint && <><p style={{textAlign:"center"}}>{game.hint}</p><div className="btn" onClick={generateHint}>Generate New Hint</div></>}

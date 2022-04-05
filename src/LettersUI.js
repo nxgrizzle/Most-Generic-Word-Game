@@ -32,7 +32,7 @@ export default function LettersUI(props) {
             {props.circles.map((letter, index, arr)=>{
             const total = arr.length-1
             const div = 360 / total
-            const radius = props.width < 1000 ? 120 : 150
+            const radius = props.width < 1000 ? 120 : 130
             const parent = document.getElementsByClassName("circle--required")[0]
             const parentOffset = parseInt(parent.offsetWidth/2)
             const childOffset = props.width < 1000 ? 50 : 60
