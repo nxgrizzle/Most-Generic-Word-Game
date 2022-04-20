@@ -9,12 +9,12 @@ export default function Text(props) {
     const [k, setK] = useState(new Date()) // shortcut id
     useEffect(()=>{
         // if props.message
+        if(props.message){
             setCurrent(props.message)
             setPlaying(true)
             // if animation is ongoing and it matches the current, then don't change
             // just don't do anything if there's no message.
-        
-        // otherwise, cancel current animation and start a new one.
+        }
     }, [props.message, props.usedWords])
     const handleKeyDown = (e) =>{
         const letter = e.key
@@ -51,6 +51,8 @@ export default function Text(props) {
     }
     useEventListener("keydown", handleKeyDown)
     useEventListener("animationend",()=>setPlaying(false))
+    useEventListener("webkitAnimationEnd", ()=>setPlaying(false))
+    useEventListener("msAnimationEnd", ()=>setPlaying(false))
     // need to figure out how useEventListener actually works
     // also, how to update a p class in an appropriate way
     return (

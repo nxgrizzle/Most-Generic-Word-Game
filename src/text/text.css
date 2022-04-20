@@ -18,6 +18,10 @@
 
 .message {
   background-color: white;
+  -webkit-animation-name: message;
+  -o-animation-name: message;
+  -webkit-animation-duration: 1s;
+  -o-animation-duration: 1s;
   animation-name: message;
   animation-duration: 1s;
   animation-fill-mode: forwards;
