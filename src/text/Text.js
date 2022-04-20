@@ -10,7 +10,7 @@ export default function Text(props) {
     // isn't called on mobile??
     useEffect(()=>{
         // if props.message
-        alert("called")
+        alert(props.message)
         if(props.message){
             setCurrent(props.message)
             setPlaying(true)
@@ -20,6 +20,10 @@ export default function Text(props) {
             // just don't do anything if there's no message.
         }
     }, [props.message, props.usedWords])
+    useEffect(()=>{
+        console.log("this runs"
+        )
+    },[props.message])
     useEffect(()=>alert(playing),[playing])
     const handleKeyDown = (e) =>{
         const letter = e.key
