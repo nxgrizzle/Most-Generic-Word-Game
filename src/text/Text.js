@@ -16,6 +16,7 @@ export default function Text(props) {
             // just don't do anything if there's no message.
         }
     }, [props.message, props.usedWords])
+    useEffect(()=>alert(playing),[playing])
     const handleKeyDown = (e) =>{
         const letter = e.key
         if(props.letters.includes(letter.toUpperCase())){
