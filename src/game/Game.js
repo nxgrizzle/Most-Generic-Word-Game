@@ -7,22 +7,27 @@ import Text from '../text/Text'
 import Rank from "../rank/Rank"
 import Options from '../options/Options'
 
+// GOALS
+// move event listeners to main game and make text.js a display only
+// make modal a functioning thing that changes in size.
+
+
 // add a show/hide answers thing
 // add that button
 // do some styling
 // then done tbh
-// just make it mobiel friendly
 // and newgame screen would be a bull thing with a grid for each row stacked
 // add hints
 
 // no highlight
-// wtf why hover
-// on mobile views, add a hamburger that shows header and p info
 
 // good lord i need to do some sectioning off lmao
 
 // need to do a good refactor
 // i can put the dictionary file and the pangram files into a single json with everything in lists.
+
+// messages stop playing on mobile? after a single message shows
+// no such thing happens on computer
 
 export default function Game() {
     const [game, setGame] = useState({showAnswers:false, validWords:[], letters:[], usedWords:[], score:0, 

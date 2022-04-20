@@ -5,13 +5,13 @@ import "./text.css"
 export default function Text(props) {
     //make it so it always focuses after interaction
     const [playing, setPlaying] = useState(false)
-    const [current, setCurrent] = useState(props.message)
     const [k, setK] = useState(new Date()) // shortcut id
+    useEffect(()=>{alert(k)},[k])
+    useEffect(()=>alert(playing), [playing])
     useEffect(()=>{
         // if props.message
         console.log(props.message)
         if(props.message){
-            setCurrent(props.message)
             setPlaying(true)
             // if animation is ongoing and it matches the current, then don't change
             // just don't do anything if there's no message.
@@ -59,7 +59,7 @@ export default function Text(props) {
         <>
         <div className="message-container" style={{height:"1rem", margin:"0.5rem 0 0 0"}}>
         <div key={`${k}${props.usedWords.length}`} className={`${playing ? "message" : "hide"}`}>
-            {<p style={{border:"2px solid black", padding:"2px", borderRadius:"5px"}}>{current}</p>}
+            {<p style={{border:"2px solid black", padding:"2px", borderRadius:"5px"}}>{props.message}</p>}
             </div>
         </div>
         <div className="input-container">
