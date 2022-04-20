@@ -10,11 +10,10 @@ export default function Text(props) {
     // isn't called on mobile??
     useEffect(()=>{
         // if props.message
-        alert(props.message)
+
         if(props.message){
             setCurrent(props.message)
             setPlaying(true)
-            alert("called")
             setK(new Date())
             // if animation is ongoing and it matches the current, then don't change
             // just don't do anything if there's no message.
@@ -23,8 +22,7 @@ export default function Text(props) {
     useEffect(()=>{
         console.log("this runs"
         )
-    },[props.message])
-    useEffect(()=>alert(playing),[playing])
+    },[props.message, k])
     const handleKeyDown = (e) =>{
         const letter = e.key
         if(props.letters.includes(letter.toUpperCase())){
