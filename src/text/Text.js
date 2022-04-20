@@ -12,6 +12,8 @@ export default function Text(props) {
         if(props.message){
             setCurrent(props.message)
             setPlaying(true)
+            alert("called")
+            setK(new Date())
             // if animation is ongoing and it matches the current, then don't change
             // just don't do anything if there's no message.
         }
@@ -30,6 +32,7 @@ export default function Text(props) {
         // else if check enter to try and submit word
         else if (letter==="Enter"){
             props.handleEnter()
+            setK(new Date())
         }
         // else if check space to shuffle
         else if (letter===" "){
