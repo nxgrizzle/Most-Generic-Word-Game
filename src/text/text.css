@@ -4,6 +4,7 @@
   align-items: center;
 }
 .blink {
+  z-index: -1;
   animation-name: fade;
   animation-iteration-count: infinite;
   animation-timing-function: cubic-bezier(1, 0, 0, 1);
@@ -16,16 +17,34 @@
 }
 
 .message {
-  animation-name: fade;
-  animation-duration: 5s;
+  background-color: white;
+  animation-name: correct;
+  animation-duration: 1s;
   animation-fill-mode: forwards;
 }
 
+.hide {
+  visibility: hidden;
+}
 @keyframes fade {
   from {
     opacity: 1;
   }
   to {
+    opacity: 0;
+  }
+}
+
+@keyframes correct {
+  0% {
+    opacity: 0;
+    transform: translateY(150%);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+  100% {
     opacity: 0;
   }
 }

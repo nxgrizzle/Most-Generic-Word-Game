@@ -1,9 +1,23 @@
 import React from 'react'
-import { useEffect,useRef } from 'react'
+import { useState, useEffect,useRef } from 'react'
 import "./text.css"
 
 export default function Text(props) {
     //make it so it always focuses after interaction
+    const [playing, setPlaying] = useState(false)
+    const [current, setCurrent] = useState(props.message)
+    const [k, setK] = useState(new Date()) // shortcut id
+    useEffect(()=>{
+        // if props.message
+        console.log(props.message)
+        if(props.message){
+            setCurrent(props.message)
+            setPlaying(true)
+            // if animation is ongoing and it matches the current, then don't change
+            // just don't do anything if there's no message.
+        }
+        // otherwise, cancel current animation and start a new one.
+    }, [props.message, props.usedWords])
     const handleKeyDown = (e) =>{
         const letter = e.key
         if(props.letters.includes(letter.toUpperCase())){
@@ -33,15 +47,20 @@ export default function Text(props) {
         }
         else{
             props.setMessage("Invalid key pressed.")
+            setPlaying(true)
+            setK(new Date())
         }
     }
     useEventListener("keydown", handleKeyDown)
+    useEventListener("animationend",()=>setPlaying(false))
     // need to figure out how useEventListener actually works
     // also, how to update a p class in an appropriate way
     return (
         <>
-        <div className="message-container" style={{height:"1rem", margin:"0.25rem 0 0.75rem 0"}}>
-        <p>{props.message}</p>
+        <div className="message-container" style={{height:"1rem", margin:"0.5rem 0 0 0"}}>
+        <div key={`${k}${props.usedWords.length}`} className={`${playing ? "message" : "hide"}`}>
+            {<p style={{border:"2px solid black", padding:"2px", borderRadius:"5px"}}>{current}</p>}
+            </div>
         </div>
         <div className="input-container">
             <div className="text" style={{verticalAlign:"top", height:"1rem"}}>{props.current.toLowerCase()}</div>

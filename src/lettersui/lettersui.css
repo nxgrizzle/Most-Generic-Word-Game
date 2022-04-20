@@ -21,8 +21,8 @@
 
 .circle--optional {
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   background-color: #e3e8ea;
   font-size: 3rem;
   border-radius: 100px;
@@ -30,8 +30,13 @@
 
 @media only screen and (max-width: 1000px) {
   .circle--optional {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
+  }
+  .circle--required {
+    position: relative;
+    width: 90px;
+    height: 90px;
   }
 }
 @keyframes fadein {

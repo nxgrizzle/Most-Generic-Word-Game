@@ -4,9 +4,7 @@ import './lettersui.css'
 export default function LettersUI(props) {
 
     // the enter animation is buggy bc it does its own magic with absolute positioning
-    // i still like the fade in though so idk
-    // if i can get the absolute positioning to be zero, then go to the custom points, that'd be kosher
-    // but tbh, turning this off is fine i guess idk
+
 
     /* 
     I could do something where I have a fade-in CSS thing, then add that class on animation start
@@ -32,10 +30,10 @@ export default function LettersUI(props) {
             {props.circles.map((letter, index, arr)=>{
             const total = arr.length-1
             const div = 360 / total
-            const radius = props.width < 1000 ? 120 : 130
+            const radius = props.width < 1000 ? 100 : 140
             const parent = document.getElementsByClassName("circle--required")[0]
             const parentOffset = parseInt(parent.offsetWidth/2)
-            const childOffset = props.width < 1000 ? 50 : 60
+            const childOffset = props.width < 1000 ? 40 : 55
             const offset = parentOffset-childOffset
             const y = Math.sin(((Math.PI)/2)+(div * (index+1)) * (Math.PI / 180)) * radius*-1;
             const x = Math.cos(((Math.PI)/2)+(div * (index+1)) * (Math.PI / 180)) * radius*-1;
