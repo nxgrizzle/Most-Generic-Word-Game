@@ -7,8 +7,10 @@ export default function Text(props) {
     const [playing, setPlaying] = useState(false)
     const [current, setCurrent] = useState(props.message)
     const [k, setK] = useState(new Date()) // shortcut id
+    // isn't called on mobile??
     useEffect(()=>{
         // if props.message
+        alert("called")
         if(props.message){
             setCurrent(props.message)
             setPlaying(true)
