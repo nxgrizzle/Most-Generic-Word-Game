@@ -20,7 +20,7 @@ export default function Text(props) {
         }
     }, [props.message, props.usedWords])
     useEffect(()=>{
-        console.log("this runs"
+        alert("this runs"
         )
     },[props.message, k])
     const handleKeyDown = (e) =>{
