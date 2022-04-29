@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import Modal from 'react-modal'
+import "./rank.css"
 export default function Rank(props) {
     // calculate rank
     // display rank and minimum score
@@ -9,8 +10,8 @@ export default function Rank(props) {
     }    
     const style={
         overlay:{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:"rgba(25,25,25,.75)"}, 
-        content:{display:"grid", gridTemplateColumns:`repeat(3, 1fr)`, gridGap:"10px", position: "absolute", top: "50%", left: "50%",
-        transform: "translate(-50%, -50%)", background:"white", width:"70vw", height:"40vh"}
+        content:{display:"flex", justifyContent:"center", alignItems:"center", position: "absolute", top: "50%", left: "50%",
+        transform: "translate(-50%, -50%)", background:"white", width:"12rem", height:"17rem"}
     }
   return (
     <>
@@ -19,6 +20,8 @@ export default function Rank(props) {
         <p>Score: {props.score}/{props.maxScore}. <span style={{display:"inline-flex", marginLeft:"2vw"}} className="btn" onClick={()=>props.setModal(prev=>({...prev, rank:true}))}>{props.userRank}</span></p>
                     <Modal isOpen={props.modal.rank} closeTimeoutMS={200} style={style} onRequestClose={()=>props.setModal(prev=>({...prev, rank:false}))} shouldCloseOnOverlayClick={props.modal.overlayClick} shouldCloseOnEsc={props.modal.escClick}>
                         <div className="rank-container">
+                        <div className="close" onClick={()=>props.setModal(prev=>({...prev, rank:false}))}>X</div>
+
                         <p>Beginner: {minScore(2)}</p>
                         <p>Improving: {minScore(5)}</p>
                         <p>Average: {minScore(8)}</p>

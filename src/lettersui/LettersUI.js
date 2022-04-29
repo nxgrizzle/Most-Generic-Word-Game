@@ -56,7 +56,7 @@ const exitThenFlipThenEnter = ({
             {props.circles.map((letter, index, arr)=>{
             const total = arr.length-1
             const div = 360 / total
-            const radius = props.width < 800 ? 100 : 125
+            const radius = props.width < 800 ? 100 : 130
             const parent = document.getElementsByClassName("circle--required")[0]
             const parentOffset = parseInt(parent.offsetWidth/2)
             const childOffset = props.width < 800 ? 40 : 55
@@ -81,7 +81,7 @@ const exitThenFlipThenEnter = ({
                     {letter}
                     </div>
                     </Flipped>
-            return <Flipped translate={false} scale={false} opacity={true} onAppear={elementIn} onExit={elementOut} flipId={`${letter}--required`} key={letter}><div className="required-letter">{letter}</div></Flipped>
+            return <Flipped translate={false} scale={false} opacity={true} onAppear={elementIn} onExit={elementOut} flipId={`${letter}--required`} key={letter}><div className="required-letter" onClick={handleRequiredClick}>{letter}</div></Flipped>
             })}
             </Flipper>
             {props.children}
