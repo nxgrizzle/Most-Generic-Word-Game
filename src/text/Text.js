@@ -1,28 +1,53 @@
 import React from 'react'
 import { useState, useEffect,useRef } from 'react'
 import "./text.css"
-
+import anime from 'animejs'
 export default function Text(props) {
-    //make it so it always focuses after interaction
-    const [playing, setPlaying] = useState(false)
+    // split this into an eventlistener and an animator prop
+    
+    const messageRef = useRef(null)
     const [current, setCurrent] = useState(props.message)
-    const [k, setK] = useState(new Date()) // shortcut id
-    // isn't called on mobile??
+    const [animeRef, setAnimeRef] = useState({})
+    useEffect(()=>{
+        setAnimeRef({
+        correct: anime({
+            targets: messageRef.current,
+            keyframes: [
+                {translateY:"-10%", color:"#000", backgroundColor:"#fff", duration:1},
+                {translateY:"-25%", opacity:1},
+                {translateY: "10%", opacity:0, delay:300, duration:180},
+            ],
+            easing:"easeInSine",
+            autoplay:false
+        }),
+        incorrect: anime({
+            targets:messageRef.current, 
+            color:"#fff",
+            backgroundColor:"#000",
+            keyframes:[
+                {color:"#fff", backgroundColor:"#000", duration:1},
+                {translateX:"-5%", opacity:1},
+                {translateX:"5%"},
+                {translateX:"-2.5%"},
+                {translateX:"2.5%"},
+                {translateX:"0%", opacity:0},
+            ],
+            autoplay:false,
+            easing:"easeInOutSine", 
+        })
+    })
+    },[])
     useEffect(()=>{
         // if props.message
+        // okay so this only half works
+        // and only if the question is wrong, never right
 
         if(props.message){
             setCurrent(props.message)
-            setPlaying(true)
-            setK(new Date())
-            // if animation is ongoing and it matches the current, then don't change
-            // just don't do anything if there's no message.
+            if(props.message.includes("Nice"))animeRef.correct.restart()
+            else animeRef.incorrect.restart()
         }
-    }, [props.message, props.usedWords])
-    useEffect(()=>{
-        alert("this runs"
-        )
-    },[props.message, k])
+    }, [props.message])
     const handleKeyDown = (e) =>{
         const letter = e.key
         if(props.letters.includes(letter.toUpperCase())){
@@ -36,7 +61,6 @@ export default function Text(props) {
         // else if check enter to try and submit word
         else if (letter==="Enter"){
             props.handleEnter()
-            setK(new Date())
         }
         // else if check space to shuffle
         else if (letter===" "){
@@ -53,20 +77,14 @@ export default function Text(props) {
         }
         else{
             props.setMessage("Invalid key pressed.")
-            setPlaying(true)
-            setK(new Date())
+            animeRef.incorrect.restart()
         }
     }
     useEventListener("keydown", handleKeyDown)
-    useEventListener("animationend",()=>setPlaying(false))
-    useEventListener("webkitAnimationEnd", ()=>setPlaying(false))
-    useEventListener("msAnimationEnd", ()=>setPlaying(false))
-    // need to figure out how useEventListener actually works
-    // also, how to update a p class in an appropriate way
     return (
         <>
         <div className="message-container" style={{height:"1rem", margin:"0.5rem 0 0 0"}}>
-        <div key={`${k}${props.usedWords.length}`} className={`${playing ? "message" : "hide"}`}>
+        <div className="message" ref={messageRef}>
             {<p style={{border:"2px solid black", padding:"2px", borderRadius:"5px"}}>{current}</p>}
             </div>
         </div>
@@ -78,29 +96,20 @@ export default function Text(props) {
   )
 }
 
-function useEventListener(eventName, handler, element = window) {
-  // Create a ref that stores handler
-    const savedHandler = useRef();
-  // Update ref.current value if handler changes.
-  // This allows our effect below to always get latest handler ...
-  // ... without us needing to pass it in effect deps array ...
-  // ... and potentially cause effect to re-run every render.
+function useEventListener(eventName, handler) {
+    const handlerRef = useRef();
+    // save the handler in a ref
     useEffect(() => {
-        savedHandler.current = handler;
+        handlerRef.current = handler;
     }, [handler]);
     useEffect(() => {
-      // Make sure element supports addEventListener
-      // On
-      const isSupported = element && element.addEventListener;
-      if (!isSupported) return;
       // Create event listener that calls handler function stored in ref
-      const eventListener = (event) => savedHandler.current(event);
+      const eventListener = (event) => handlerRef.current(event);
       // Add event listener
-      element.addEventListener(eventName, eventListener);
+      window.addEventListener(eventName, eventListener);
       // Remove event listener on cleanup
       return () => {
-        element.removeEventListener(eventName, eventListener);
+        window.removeEventListener(eventName, eventListener);
       };
-    },
-        [eventName, element]) // Re-run if eventName or element changes
-    }  
+    },[eventName])
+}

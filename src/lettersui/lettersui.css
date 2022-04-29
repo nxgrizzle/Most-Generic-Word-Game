@@ -12,7 +12,7 @@
   height: 120px;
   background-color: #bccad0;
   border-radius: 50%;
-  margin: 150px;
+  margin: 130px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +28,14 @@
   border-radius: 100px;
 }
 
-@media only screen and (max-width: 1000px) {
+.enter {
+  animation-name: fadeIn 0.5s forwards;
+}
+
+.exit {
+  animation-name: fadeOut 0.5s forwards;
+}
+@media only screen and (max-width: 800px) {
   .circle--optional {
     width: 80px;
     height: 80px;
@@ -37,13 +44,23 @@
     position: relative;
     width: 90px;
     height: 90px;
+    margin: 120px 95px 100px;
   }
 }
-@keyframes fadein {
+
+@keyframes fadeIn {
   from {
-    opacity: 0.5;
+    opacity: 0;
   }
   to {
     opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }

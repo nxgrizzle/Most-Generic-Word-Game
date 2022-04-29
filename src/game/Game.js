@@ -6,10 +6,19 @@ import Header from '../header/Header'
 import Text from '../text/Text'
 import Rank from "../rank/Rank"
 import Options from '../options/Options'
+import Tutorial from '../tutorial/Tutorial'
+import Used from '../used/Used'
 
+// maybe make a generic button that goes to a Modal??? to decompose
+
+// add a quick tutorial screen for new players (aka if game is empty)
 // GOALS
-// move event listeners to main game and make text.js a display only
-// make modal a functioning thing that changes in size.
+// organize styles and make the whole css vs inline make sense
+// decompose bloated functions
+// organize the ui better, make it work on mobile vs desktop
+// on first render (aka, when there's nothing in localstorage, load a tutorial.)
+
+// tbh after this i'm done and it works. which should take a day or two tbh
 
 
 // add a show/hide answers thing
@@ -30,31 +39,59 @@ import Options from '../options/Options'
 // no such thing happens on computer
 
 export default function Game() {
-    const [game, setGame] = useState({showAnswers:false, validWords:[], letters:[], usedWords:[], score:0, 
-        maxScore:0, requiredLetter:"", currentWord:"" , message:"", showHint:false, hint:"", hintMap:{}, rank:"Newbie"})
-    const generateHint = () =>{
-            const keys = Object.keys(game.hintMap)
-            const num = Math.floor(Math.random() * keys.length)
-            const phrase = keys[num]
-            const number = game.hintMap[phrase]
-            const fullString = `There ${number >= 2 ? "are" : "is"} still ${number} word${number >=2 ?"s" : ""} that ha${number >= 2 ? "ve" : "s"} ${phrase}`
-            setGame(prev=>({...prev, hint:fullString}))
-    }
+
+    // states
+    const [firstTime, setFirstTime] = useState(false)
+    
+    const [game, setGame] = useState({showAnswers:false, validWords:[], 
+        letters:[], usedWords:[], score:0, 
+        maxScore:0, requiredLetter:"", currentWord:"" , 
+        message:"", showHint:false, hint:"", 
+        hintMap:{}, rank:"Newbie", id:new Date()})
+
+    const [modal, setModal] = useState({
+        answers:false,
+        hint:false,
+        tutorial:false,
+        newGame:false,
+        rank:false,
+        overlayClick:true,
+        escClick:false
+    })
+    const [width, height] = useWindowSize()
+
+    const [menu, setMenu] = useState(false)
+
+    // effects
+
     useEffect(()=>{
         const stored_game = localStorage.getItem("game")
         const game = JSON.parse(stored_game)
-        game ? setGame(game) : importPangram(7);
+        game ? setGame(game) : generateNewGame()
     },[])
     useEffect(()=>{
             generateHint()
-        
     },[game.showHint, game.hintMap])
+    
     useEffect(()=>{
         const stored_game = JSON.stringify({...game, message:""})
         localStorage.setItem("game", `${stored_game}`)},
     [game])
-    const [width, height] = useWindowSize()
-    const [menu, setMenu] = useState(false)
+
+    const generateHint = () =>{
+        const keys = Object.keys(game.hintMap)
+        const num = Math.floor(Math.random() * keys.length)
+        const phrase = keys[num]
+        const number = game.hintMap[phrase]
+        const fullString = `There ${number >= 2 ? "are" : "is"} still ${number} word${number >=2 ?"s" : ""} that ha${number >= 2 ? "ve" : "s"} ${phrase}`
+        setGame(prev=>({...prev, hint:fullString}))
+    }
+    const generateNewGame = () => {
+        importPangram(7)
+        setFirstTime(true)
+    }
+
+    
     const isPangram = (word) => game.letters.every(letter=> word.split("").includes(letter))
     const placeReqLetterFirst = (arr,letter)=>{
         const copy = [...arr]
@@ -87,7 +124,7 @@ export default function Game() {
         else if(percentage >= 100) userRank = "Godly"
         else userRank = "Newbie"
         return userRank
-    }
+    } 
     const shuffle = () =>{
         const newLetters = placeReqLetterFirst(randomize(game.letters), game.requiredLetter)
         setGame((prev)=>({...prev, letters:newLetters}))
@@ -98,7 +135,6 @@ export default function Game() {
         else if(length === 7) txt="seven";
         else if(length ===8) txt="eight";
         else return
-        
         fetch("final.json", {
             headers : { 
                 'Content-Type': 'application/json',
@@ -129,6 +165,7 @@ export default function Game() {
                     validWords.push(word)
                 }
             })
+            const id = new Date()
             const hintMap = {}
             const begPhrase = "at the beginning."
             const endPhrase = "at the end."
@@ -141,7 +178,7 @@ export default function Game() {
             }
             // one point per letter, +10 for pangram
             const maxScore = validWords.reduce((acc,curr)=>acc+curr.length,10)
-            setGame({showAnswers:false, usedWords:[],validWords:validWords, letters:letters, requiredLetter:requiredLetter, maxScore:maxScore, score:0, currentWord:"", message:"", hint:"",showHint:false, hintMap:hintMap, rank:"Newbie"})
+            setGame({showAnswers:false, usedWords:[],validWords:validWords, letters:letters, requiredLetter:requiredLetter, maxScore:maxScore, score:0, currentWord:"", message:"", hint:"",showHint:false, hintMap:hintMap, rank:"Newbie", id:id})
         })
     }
     const handleEnter = () =>{
@@ -159,7 +196,7 @@ export default function Game() {
                 // nope, so send
                 else{
                     message = isPangram(game.currentWord) ? "Pangram! Nice job!" : "Nice word!"
-                    submitWord()
+                    submitWord(message)
                 }
             }
             // not valid, so send a message
@@ -167,7 +204,7 @@ export default function Game() {
             else{
                 message = "Not a word in the dictionary."
             }
-            setGame(prev=>({...prev, currentWord:"", message:message}))
+            if(!message.includes("Nice")) setGame(prev=>({...prev, currentWord:"", message:message}))
     }
     const clearCurrentWord = () => {
         setGame(prev=>({...prev, currentWord:""}))
@@ -178,20 +215,22 @@ export default function Game() {
         }
         else setGame(prev=>({...prev, currentWord:game.currentWord+word}))
     }
-    const submitWord = () =>{
+    const submitWord = (message) =>{
         const score = game.score + (isPangram(game.currentWord) ? game.currentWord.length+10 : game.currentWord.length)
         const usedWords = game.usedWords
         const hintMap = {...game.hintMap}
         const begPhrase = `"${game.currentWord.slice(0,2).toLowerCase()}" at the beginning.`
         const endPhrase = `"${game.currentWord.slice(-2).toLowerCase()}" at the end.`
-        hintMap[begPhrase] = hintMap[begPhrase] -1
-        hintMap[endPhrase] = hintMap[endPhrase] - 1
+        
+        hintMap[begPhrase] === 1 ? delete hintMap[begPhrase] : hintMap[begPhrase] = hintMap[begPhrase] - 1
+        hintMap[endPhrase] === 1 ? delete hintMap[endPhrase] : hintMap[endPhrase] = hintMap[endPhrase] - 1
+        console.log(hintMap)
         usedWords.push(game.currentWord)
         usedWords.sort()
         const userRank = rank(score)
             // add points, usedWords
             // clear currentWord, set message to something nice
-        setGame(prev=>({...prev, currentWord:"", score:score,  usedWords:usedWords, rank:userRank, hintMap:hintMap}))
+        setGame(prev=>({...prev, currentWord:"", score:score,  usedWords:usedWords, rank:userRank, hintMap:hintMap, message:message}))
         }
     const setMessage = (message) =>{
         setGame(prev=>({...prev, message:message}))
@@ -210,20 +249,31 @@ export default function Game() {
 
   return (
     <div className="full" style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column"}}>
-        <Header usedWords={game.usedWords} length={game.letters.length} answers={game.validWords} toggleAnswers={toggleAnswers} showAnswers={game.showAnswers} newGame={importPangram} width={width}/>
-        <div style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", width:"90vw"}}>
-        <p>You have found {game.usedWords.length} word{game.usedWords.length===1?"":"s"} out of {game.validWords.length}.</p>
-        <Rank userRank={game.rank} maxScore={game.maxScore} score={game.score}/>
-        </div>
-        {width < 1000 && <div className={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
-            {width < 1000 && <div className={`${menu ? "rotated" : ""} dropdown`} style={{position:"absolute", top:0, right:"5px", fontWeight:"bold", cursor:"pointer"}} 
-            onClick={toggleMenu}>ᐁ</div>}
-            <ul className="used-words">
-            {game.usedWords.map(word=>{
-                return <li className="used-words-li" style={{fontWeight:"bold"}}>{word.toLowerCase()}</li>
-            })}
-            </ul>
-        </div>}
+        <Tutorial modal={modal} 
+            setModal={setModal} 
+            length={game.letters.length} 
+            firstTime={firstTime} 
+            setFirstTime={setFirstTime}
+        />
+        <Header 
+            usedWords={game.usedWords} 
+            length={game.letters.length} answers={game.validWords} 
+            toggleAnswers={toggleAnswers} showAnswers={game.showAnswers} 
+            newGame={importPangram} width={width}
+            setGame={setGame}
+            setModal={setModal}
+            modal={modal}
+        />
+        <Rank 
+            usedWords={game.usedWords} 
+            validWords={game.validWords} 
+            setModal={setModal} 
+            modal={modal} 
+            userRank={game.rank} 
+            maxScore={game.maxScore} 
+            score={game.score}
+        />
+        <div className="main-game-container"></div>
         <Text clearCurrentWord={clearCurrentWord} 
               setCurrentWord={setCurrentWord} submitWord={submitWord} 
               validWords={game.validWords} usedWords={game.usedWords} 
@@ -233,29 +283,16 @@ export default function Game() {
               setMessage={setMessage} handleEnter={handleEnter}
               toggleAnswers={toggleAnswers} showAnswers={game.showAnswers}/>
         
-        <div className="game-container" style={{height:`${width<1000? "320px":""}`, display:"flex", justifyContent:"center", alignItems:"center"}}>
-        {game.letters && <div className="letters-container">
-            <LettersUI setCurrentWord={setCurrentWord} circles={game.letters} width={width}/>
-        </div>}
-        {width >= 1000 && <div className={`words-container used ${(width < 1000 && menu) ? "opened" : ""}`} style={{position:"relative"}}>
-            {width < 1000 && <div style={{position:"absolute", top:0, right:5, fontWeight:"bold", cursor:"pointer"}} 
-            onClick={toggleMenu}>{menu ? "ᐃ" : "ᐁ"}</div>}
-            <ul className="used-words">
-            {game.usedWords.map(word=>{
-                return <li key={word} className="used-words-li" style={{fontWeight:"bold"}}>{word.toLowerCase()}</li>
-            })}
-            </ul>
-        </div>}
+        <div className="game-container">
+            <LettersUI id={game.id} setCurrentWord={setCurrentWord} circles={game.letters} width={width}>
+                <Options modal={modal} setModal={setModal} hint={game.hint} generateHint={generateHint} showHint={game.showHint} toggleHint={toggleHint} shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord} />
+            </LettersUI>
+            <Used width={width} usedWords={game.usedWords} toggleMenu={toggleMenu} menu={menu}/>
         </div>
-        <div className="options-container" style={{display:"grid", gridGap:"5px", gridTemplateColumns:"repeat(3,1fr)", margin:`${width<1000? "0" : "10px 0"}`}}>
-            <Options hint={game.hint} generateHint={generateHint} showHint={game.showHint} toggleHint={toggleHint} shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord} />
-        </div>
+
     </div>
   )
 }
-
-// probably, when hit new game, open a modal which will have buttons for the size of the game (easy, med, hard)
-// container over LettersUI keeps everything neat and tidy.
 
 function useWindowSize() {
     const [size, setSize] = useState([0,0])
@@ -269,3 +306,14 @@ function useWindowSize() {
     },[])
     return size
 }
+
+// grid order desktop
+// text
+// [letters] [answers]
+// [options menu] [answers]
+
+// grid order mobile
+// [answers]
+// text
+// [letters]
+// [options menu]

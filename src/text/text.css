@@ -18,12 +18,7 @@
 
 .message {
   background-color: white;
-  -webkit-animation-name: message;
-  -o-animation-name: message;
-  -webkit-animation-duration: 1s;
-  -o-animation-duration: 1s;
-  animation-name: message;
-  animation-duration: 1s;
+  opacity: 0;
   animation-fill-mode: forwards;
 }
 
@@ -36,20 +31,6 @@
     opacity: 1;
   }
   to {
-    opacity: 0;
-  }
-}
-
-@keyframes message {
-  0% {
-    opacity: 0;
-    transform: translateY(150%);
-  }
-  85% {
-    opacity: 1;
-    transform: translateY(-20%);
-  }
-  100% {
     opacity: 0;
   }
 }

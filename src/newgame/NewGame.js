@@ -1,26 +1,23 @@
 import React from 'react'
 import "./newgame.css"
-import { useState } from 'react'
+import Modal from 'react-modal'
+import "../ui/modal.css"
 export default function NewGame(props) {
-    const [modal, setModal] = useState(false)
-    const removeModal = (e) =>{
-        if(Array.from(e.target.classList).includes("modal-container") || Array.from(e.target.classList).includes("close")) setModal(false)
-    }
-    const addModal = (e) =>{
-        console.log(e.currentTarget)
-        setModal(true)
-    }
-    // have an x that toggles modal
     const toggleGame = (length) =>{
         props.newGame(length)
-        setModal(false)
+        props.setModal(prev=>({...prev, newGame:false}))
+    }
+    const style={
+        overlay:{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:"rgba(25,25,25,.75)"}, 
+        content:{display:"grid", gridTemplateColumns:`repeat(3, 1fr)`, gridGap:"10px", position: "absolute", top: "50%", left: "50%",
+        transform: "translate(-50%, -50%)", background:"white", width:"70vw", height:"40vh"}
     }
     return (
     <>
-        <div className="btn" onClick={e=>addModal(e)}>New Game</div>
-        <div onClick={e=>removeModal(e)}className={`modal-container ${modal ? "active" : ""}`}>
-            <div className={`modal grid ${props.width < 1000 ? "grid--one" : "grid--three"}`}>
-                <div className="close" onClick={e=>removeModal(e)}>X</div>
+    <div className="btn" onClick={e=>props.setModal(prev=>({...prev, newGame:true}))}>New Game</div>
+        <Modal closeTimeoutMS={400} style={style} isOpen={props.modal.newGame} onRequestClose={()=>props.setModal(prev=>({...prev, newGame:false}))} shouldCloseOnOverlayClick={props.modal.overlayClick} shouldCloseOnEsc={props.modal.escClick}>
+                <></>
+                <div className="close" onClick={e=>props.removeModal(e)}>X</div>
                 <div onClick={()=>toggleGame(6)} className="grid-item">
                     <p>You have 6 letters.</p>
                     <p>Find words that have three or more letters in them.</p>
@@ -36,8 +33,7 @@ export default function NewGame(props) {
                     <p>Find words that have five or more letters in them.</p>
                     <h3>Hard</h3>
                 </div>
-            </div>
-        </div>
+        </Modal>
     </>
   )
 }
