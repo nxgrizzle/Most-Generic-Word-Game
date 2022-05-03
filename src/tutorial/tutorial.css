@@ -1,0 +1,8 @@
+.fa-icon {
+  transition: 0.1s ease;
+}
+
+.fa-icon:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}

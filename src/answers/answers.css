@@ -13,3 +13,21 @@
   top: 0;
   right: 0;
 }
+.scrollbox {
+  overflow: hidden;
+}
+.scrollbox:hover,
+.scrollbox:focus {
+  overflow: scroll;
+}
+@media screen and (max-width: 700px) {
+  .answers--li {
+    width: 25%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .answers--li {
+    width: 33%;
+  }
+}

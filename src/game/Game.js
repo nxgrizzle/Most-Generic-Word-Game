@@ -8,7 +8,7 @@ import Rank from "../rank/Rank"
 import Options from '../options/Options'
 import Tutorial from '../tutorial/Tutorial'
 import Used from '../used/Used'
-
+import Hint from "../hint/Hint"
 // maybe make a generic button that goes to a Modal??? to decompose
 
 // add a quick tutorial screen for new players (aka if game is empty)
@@ -249,12 +249,7 @@ export default function Game() {
 
   return (
     <div className="full" style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column"}}>
-        <Tutorial modal={modal} 
-            setModal={setModal} 
-            length={game.letters.length} 
-            firstTime={firstTime} 
-            setFirstTime={setFirstTime}
-        />
+        
         <Header 
             usedWords={game.usedWords} 
             length={game.letters.length} answers={game.validWords} 
@@ -263,6 +258,8 @@ export default function Game() {
             setGame={setGame}
             setModal={setModal}
             modal={modal}
+            firstTime={firstTime} 
+            setFirstTime={setFirstTime}
         />
         <Rank 
             usedWords={game.usedWords} 
@@ -285,7 +282,12 @@ export default function Game() {
         
         <div className="game-container">
             <LettersUI id={game.id} setCurrentWord={setCurrentWord} circles={game.letters} width={width}>
-                <Options modal={modal} setModal={setModal} hint={game.hint} generateHint={generateHint} showHint={game.showHint} toggleHint={toggleHint} shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord} />
+                <Options modal={modal} setModal={setModal} hint={game.hint} generateHint={generateHint} showHint={game.showHint} toggleHint={toggleHint} shuffle={shuffle} handleEnter={handleEnter} setCurrentWord={setCurrentWord}>
+                    <Hint modal={modal} 
+                        setModal={setModal} 
+                        hint={game.hint} 
+                        generateHint={generateHint}/>
+                </Options>
             </LettersUI>
             <Used width={width} usedWords={game.usedWords} toggleMenu={toggleMenu} menu={menu}/>
         </div>

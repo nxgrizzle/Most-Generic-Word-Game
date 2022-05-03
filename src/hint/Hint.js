@@ -11,11 +11,10 @@ export default function Answers(props) {
   return (
     <>
       <div style={{gridColumn:"2/span 1"}} onClick={()=>props.setModal(prev=>({...prev, hint:true}))} className="btn">{props.modal.hint? "Hide" : "Show"} Hint</div>
-        <Modal closeTimeoutMS={200} style={style} isOpen={props.modal.hint} onRequestClose={()=>props.setModal(prev=>({...prev, hint:false}))} shouldCloseOnOverlayClick={props.modal.overlayClick} shouldCloseOnEsc={props.modal.escClick}>
+        <Modal appElement={document.getElementById("root") || undefined} closeTimeoutMS={200} style={style} isOpen={props.modal.hint} onRequestClose={()=>props.setModal(prev=>({...prev, hint:false}))} shouldCloseOnOverlayClick={props.modal.overlayClick} shouldCloseOnEsc={props.modal.escClick}>
             <div style={{fontSize:"1.25rem",display:"flex", justifyContent:"center", alignItems:"center"}}>
-              <div className="close" onClick={()=>props.setModal(prev=>({...prev, hint:false}))}>X</div>
                 <div style={{display:'flex',flexDirection:"column",justifyContent:"center", alignItems:"center"}}class="hint-container">
-                    <p>{props.hint}</p>
+                    <p style={{textAlign:"center", marginBottom:"1rem"}}>{props.hint}</p>
                     <div className="btn" onClick={props.generateHint}>Generate New Hint</div>
                 </div>
             </div>

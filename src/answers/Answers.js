@@ -17,15 +17,14 @@ export default function Answers(props) {
   const style={
         overlay:{display:"flex", justifyContent:"center", alignItems:"center", backgroundColor:"rgba(25,25,25,.75)"}, 
         content:{display:"flex", justifyContent:"center", alignItems:"center", position: "absolute", top: "50%", left: "50%",
-        transform: "translate(-50%, -50%)", background:"white", width:"80vw", height:"40vh"}
+        transform: "translate(-50%, -50%)", background:"white", width:"80vw", height:"60vh"}
     }
 
   return (
     <>
       <div className="btn" onClick={handleOpen}>{props.showAnswers ? "Hide Answers" : "Show Answers"}</div>
-      <Modal closeTimeoutMS={200} style={style} isOpen={props.modal.answers} onRequestClose={handleClose} shouldCloseOnOverlayClick={props.modal.overlayClick} shouldCloseOnEsc={props.modal.escClick}>
-              <div className="close" onClick={()=>handleClose()}>X</div>
-                  <ul className="answers">
+      <Modal appElement={document.getElementById("root") || undefined} closeTimeoutMS={200} style={style} isOpen={props.modal.answers} onRequestClose={handleClose} shouldCloseOnOverlayClick={props.modal.overlayClick} shouldCloseOnEsc={props.modal.escClick}>
+                <ul className="answers">
                 {props.answers.map((word,i)=>{
                   return <li key={i} className="answers--li" style={{fontWeight:`${props.usedWords.includes(word) ? "normal" : "bold"}`}}>{word.toLowerCase()}</li>
                 })}

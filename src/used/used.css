@@ -5,11 +5,27 @@
 
 .used-words {
   padding: 0.5rem 2rem;
-  column-count: 4;
   overflow-y: auto;
 }
 .used-words-li {
-  margin: 5px 0 0 0;
+  display: inline-block;
+  width: 25%;
+}
+.used-words-li:before {
+  content: "•";
+  margin-right: 0.5rem;
+}
+@media screen and (max-width: 1000px) {
+  .used-words-li {
+    display: inline-block;
+    width: 33%;
+  }
+}
+@media screen and (max-width: 900px) {
+  .used-words-li {
+    display: inline-block;
+    width: 50%;
+  }
 }
 @media screen and (max-width: 800px) {
   .words-container {
@@ -30,15 +46,30 @@
     display: inline-block;
     width: 25%;
   }
+  .used-words-li:before {
+    content: "";
+    margin: 0;
+  }
   .opened {
     height: 9.5rem;
     overflow-y: auto;
   }
 }
 
+@media screen and (max-width: 600px) {
+  .used-words-li {
+    width: 33%;
+  }
+}
+
 @media screen and (max-width: 500px) {
   .used-words-li {
-    display: inline-block;
-    width: 33%;
+    width: 50%;
+    text-align: center;
+  }
+}
+@media screen and (max-width: 400px) {
+  .used-words-li {
+    width: 100%;
   }
 }

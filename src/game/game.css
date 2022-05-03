@@ -46,7 +46,7 @@ p {
     grid-template-columns: auto;
     justify-items: center;
     align-items: center;
-    grid-gap: 2rem;
+    grid-gap: 0.5rem;
   }
   .letters-container {
     order: 2;

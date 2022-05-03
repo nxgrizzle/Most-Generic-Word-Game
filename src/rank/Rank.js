@@ -18,10 +18,8 @@ export default function Rank(props) {
     <div style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", width:"90vw"}}>
         <p>You have found {props.usedWords.length} word{props.usedWords.length===1?"":"s"} out of {props.validWords.length}.</p>
         <p>Score: {props.score}/{props.maxScore}. <span style={{display:"inline-flex", marginLeft:"2vw"}} className="btn" onClick={()=>props.setModal(prev=>({...prev, rank:true}))}>{props.userRank}</span></p>
-                    <Modal isOpen={props.modal.rank} closeTimeoutMS={200} style={style} onRequestClose={()=>props.setModal(prev=>({...prev, rank:false}))} shouldCloseOnOverlayClick={props.modal.overlayClick} shouldCloseOnEsc={props.modal.escClick}>
+                    <Modal appElement={document.getElementById("root") || undefined} isOpen={props.modal.rank} closeTimeoutMS={200} style={style} onRequestClose={()=>props.setModal(prev=>({...prev, rank:false}))} shouldCloseOnOverlayClick={props.modal.overlayClick} shouldCloseOnEsc={props.modal.escClick}>
                         <div className="rank-container">
-                        <div className="close" onClick={()=>props.setModal(prev=>({...prev, rank:false}))}>X</div>
-
                         <p>Beginner: {minScore(2)}</p>
                         <p>Improving: {minScore(5)}</p>
                         <p>Average: {minScore(8)}</p>
