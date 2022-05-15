@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import "./text.css";
+import useEventListener from "../utils/useEventListener";
 import anime from "animejs";
 export default function Text(props) {
   // split this into an eventlistener and an animator prop
@@ -111,22 +112,4 @@ export default function Text(props) {
       </div>
     </>
   );
-}
-
-function useEventListener(eventName, handler) {
-  const handlerRef = useRef();
-  // save the handler in a ref
-  useEffect(() => {
-    handlerRef.current = handler;
-  }, [handler]);
-  useEffect(() => {
-    // Create event listener that calls handler function stored in ref
-    const eventListener = (event) => handlerRef.current(event);
-    // Add event listener
-    window.addEventListener(eventName, eventListener);
-    // Remove event listener on cleanup
-    return () => {
-      window.removeEventListener(eventName, eventListener);
-    };
-  }, [eventName]);
 }

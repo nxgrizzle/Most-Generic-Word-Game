@@ -9,33 +9,7 @@ import Options from "../options/Options";
 import Tutorial from "../tutorial/Tutorial";
 import Used from "../used/Used";
 import Hint from "../hint/Hint";
-// maybe make a generic button that goes to a Modal??? to decompose
-
-// add a quick tutorial screen for new players (aka if game is empty)
-// GOALS
-// organize styles and make the whole css vs inline make sense
-// decompose bloated functions
-// organize the ui better, make it work on mobile vs desktop
-// on first render (aka, when there's nothing in localstorage, load a tutorial.)
-
-// tbh after this i'm done and it works. which should take a day or two tbh
-
-// add a show/hide answers thing
-// add that button
-// do some styling
-// then done tbh
-// and newgame screen would be a bull thing with a grid for each row stacked
-// add hints
-
-// no highlight
-
-// good lord i need to do some sectioning off lmao
-
-// need to do a good refactor
-// i can put the dictionary file and the pangram files into a single json with everything in lists.
-
-// messages stop playing on mobile? after a single message shows
-// no such thing happens on computer
+import useWindowSize from "../utils/useWindowSize";
 
 export default function Game() {
   // states
@@ -67,7 +41,7 @@ export default function Game() {
     overlayClick: true,
     escClick: false,
   });
-  const [width, height] = useWindowSize();
+  const width = useWindowSize();
 
   const [menu, setMenu] = useState(false);
 
@@ -290,8 +264,6 @@ export default function Game() {
     usedWords.push(game.currentWord);
     usedWords.sort();
     const userRank = rank(score);
-    // add points, usedWords
-    // clear currentWord, set message to something nice
     setGame((prev) => ({
       ...prev,
       currentWord: "",
@@ -305,8 +277,6 @@ export default function Game() {
   const setMessage = (message) => {
     setGame((prev) => ({ ...prev, message: message }));
   };
-  // add bar for used words like generic word game
-  // add header
   const toggleAnswers = () => {
     setGame((prev) => ({ ...prev, showAnswers: !game.showAnswers }));
   };
@@ -404,27 +374,3 @@ export default function Game() {
     </div>
   );
 }
-
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
-    }
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-  return size;
-}
-
-// grid order desktop
-// text
-// [letters] [answers]
-// [options menu] [answers]
-
-// grid order mobile
-// [answers]
-// text
-// [letters]
-// [options menu]
