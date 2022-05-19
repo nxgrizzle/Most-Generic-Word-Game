@@ -35,7 +35,6 @@ export default function Tutorial(props) {
       height: "30rem",
     },
   };
-  // give this a button somewhere, like Help.
   return (
     <>
       <div onClick={() => setModal(true)} style={{ marginLeft: "0.5rem" }}>

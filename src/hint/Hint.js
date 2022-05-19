@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import Modal from "react-modal";
 import "./hint.css";
 export default function Answers(props) {
@@ -20,16 +19,15 @@ export default function Answers(props) {
       left: "50%",
       transform: "translate(-50%, -50%)",
       background: "white",
-      width: "80vw",
-      height: "50vh",
+      width: props.width < 800 ? "60vw" : "40vw",
+      height: props.width < 800 ? "30vh" : "40vh",
     },
   };
   return (
     <>
       <div
-        style={{ gridColumn: "2/span 1" }}
         onClick={() => props.setModal((prev) => ({ ...prev, hint: true }))}
-        className="btn"
+        className="btn btn--center"
       >
         {props.modal.hint ? "Hide" : "Show"} Hint
       </div>
@@ -44,29 +42,10 @@ export default function Answers(props) {
         shouldCloseOnOverlayClick={props.modal.overlayClick}
         shouldCloseOnEsc={props.modal.escClick}
       >
-        <div
-          style={{
-            fontSize: "1.25rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            class="hint-container"
-          >
-            <p style={{ textAlign: "center", marginBottom: "1rem" }}>
-              {props.hint}
-            </p>
-            <div className="btn" onClick={props.generateHint}>
-              Generate New Hint
-            </div>
+        <div className="hint-container">
+          <p>{props.hint}</p>
+          <div className="btn" onClick={props.generateHint}>
+            Generate New Hint
           </div>
         </div>
       </Modal>

@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import Modal from "react-modal";
 import "./rank.css";
 export default function Rank(props) {
@@ -30,15 +29,7 @@ export default function Rank(props) {
   };
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          width: "90vw",
-        }}
-      >
+      <div className="rank-container">
         <p>
           You have found {props.usedWords.length} word
           {props.usedWords.length === 1 ? "" : "s"} out of{" "}
@@ -47,8 +38,7 @@ export default function Rank(props) {
         <p>
           Score: {props.score}/{props.maxScore}.{" "}
           <span
-            style={{ display: "inline-flex", marginLeft: "2vw" }}
-            className="btn"
+            className="btn btn--inline"
             onClick={() => props.setModal((prev) => ({ ...prev, rank: true }))}
           >
             {props.userRank}

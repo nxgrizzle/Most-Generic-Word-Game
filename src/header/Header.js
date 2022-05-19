@@ -6,15 +6,7 @@ import Tutorial from "../tutorial/Tutorial";
 export default function Header(props) {
   return (
     <>
-      <div
-        className="header"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "90vw",
-        }}
-      >
+      <div className="header">
         <Answers
           setModal={props.setModal}
           modal={props.modal}
@@ -23,32 +15,17 @@ export default function Header(props) {
           showAnswers={props.showAnswers}
           answers={props.answers}
         />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "1.5rem",
-              textAlign: "center",
-              marginBottom: "0.5rem",
-            }}
-          >
-            The Most Generic Word Game
-          </h1>
+        <div className="title-container">
+          <h1>The Most Generic Word Game</h1>
           {props.width >= 800 && (
-            <h3 style={{ margin: 0, fontSize: "1.2rem" }}>
+            <h2>
               {props.length === 6
                 ? "Easy"
                 : props.length === 7
                 ? "Normal"
                 : "Hard"}{" "}
               Mode
-            </h3>
+            </h2>
           )}
         </div>
         <div
@@ -78,26 +55,16 @@ export default function Header(props) {
         </div>
       </div>
       {props.width < 800 && (
-        <div
-          style={{
-            fontWeight: "bold",
-            display: "flex",
-            justifyContent: `space-between`,
-            alignItems: "center",
-            width: "90vw",
-          }}
-        >
-          <>
-            <p>
-              {props.length === 6
-                ? "Easy"
-                : props.length === 7
-                ? "Normal"
-                : "Hard"}{" "}
-              Mode
-            </p>
-            <p>Min: {props.length - 3} letters</p>
-          </>
+        <div className="subheader-container">
+          <p>
+            {props.length === 6
+              ? "Easy"
+              : props.length === 7
+              ? "Normal"
+              : "Hard"}{" "}
+            Mode
+          </p>
+          <p>Min: {props.length - 3} letters</p>
         </div>
       )}
     </>

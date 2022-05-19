@@ -4,8 +4,6 @@ import "./text.css";
 import useEventListener from "../utils/useEventListener";
 import anime from "animejs";
 export default function Text(props) {
-  // split this into an eventlistener and an animator prop
-
   const messageRef = useRef(null);
   const [current, setCurrent] = useState(props.message);
   const [animeRef, setAnimeRef] = useState({});
@@ -25,6 +23,7 @@ export default function Text(props) {
         ],
         easing: "easeInSine",
         autoplay: false,
+        begin: () => props.setMessage(""),
       }),
       incorrect: anime({
         targets: messageRef.current,
@@ -40,14 +39,11 @@ export default function Text(props) {
         ],
         autoplay: false,
         easing: "easeInOutSine",
+        begin: () => props.setMessage(""),
       }),
     });
   }, []);
   useEffect(() => {
-    // if props.message
-    // okay so this only half works
-    // and only if the question is wrong, never right
-
     if (props.message) {
       setCurrent(props.message);
       if (props.message.includes("Nice")) animeRef.correct.restart();
@@ -86,10 +82,7 @@ export default function Text(props) {
   useEventListener("keydown", handleKeyDown);
   return (
     <>
-      <div
-        className="message-container"
-        style={{ height: "1rem", margin: "0.5rem 0 0 0" }}
-      >
+      <div className="message-container">
         <div className="message" ref={messageRef}>
           {
             <p

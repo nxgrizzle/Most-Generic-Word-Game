@@ -1,2 +1,11 @@
 .rank-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 90vw;
+}
+.btn--inline {
+  display: inline-flex;
+  margin-left: 2vw;
 }

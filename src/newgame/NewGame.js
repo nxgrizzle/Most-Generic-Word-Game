@@ -1,7 +1,6 @@
 import React from "react";
 import "./newgame.css";
 import Modal from "react-modal";
-import "../ui/modal.css";
 export default function NewGame(props) {
   const toggleGame = (length) => {
     props.newGame(length);
@@ -16,7 +15,7 @@ export default function NewGame(props) {
     },
     content: {
       display: "grid",
-      gridTemplateColumns: `${props.width < 800 ? "1fr" : "repeat(3, 1fr)"}`,
+      gridTemplateColumns: `${props.width < 650 ? "1fr" : "repeat(3, 1fr)"}`,
       gridGap: "10px",
       position: "absolute",
       top: "50%",
@@ -24,7 +23,7 @@ export default function NewGame(props) {
       transform: "translate(-50%, -50%)",
       background: "white",
       width: "70vw",
-      height: `${props.width < 800 ? "80vh" : "40vh"}`,
+      height: `${props.width < 650 ? "80vh" : "40vh"}`,
     },
   };
   return (

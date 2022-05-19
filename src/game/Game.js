@@ -288,15 +288,7 @@ export default function Game() {
   };
 
   return (
-    <div
-      className="full"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
+    <div className="header-container">
       <Header
         usedWords={game.usedWords}
         length={game.letters.length}
@@ -320,7 +312,6 @@ export default function Game() {
         maxScore={game.maxScore}
         score={game.score}
       />
-      <div className="main-game-container"></div>
       <Text
         clearCurrentWord={clearCurrentWord}
         setCurrentWord={setCurrentWord}
@@ -361,6 +352,7 @@ export default function Game() {
               setModal={setModal}
               hint={game.hint}
               generateHint={generateHint}
+              width={width}
             />
           </Options>
         </LettersUI>

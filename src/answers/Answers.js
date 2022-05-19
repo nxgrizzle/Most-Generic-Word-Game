@@ -31,7 +31,7 @@ export default function Answers(props) {
       transform: "translate(-50%, -50%)",
       background: "white",
       width: "80vw",
-      height: "60vh",
+      maxHeight: "60vh",
     },
   };
 

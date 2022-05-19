@@ -2,7 +2,13 @@
   width: 100%;
   height: 100%;
 }
-
+.symbol {
+  position: absolute;
+  top: 0;
+  right: 5;
+  font-weight: bold;
+  cursor: pointer;
+}
 .used-words {
   padding: 0.5rem 2rem;
   overflow-y: auto;

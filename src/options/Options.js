@@ -1,17 +1,8 @@
 import React from "react";
-import Hint from "../hint/Hint";
-
+import "./options.css";
 export default function Options(props) {
   return (
-    <div
-      className="options-container"
-      style={{
-        display: "grid",
-        gridGap: "5px",
-        gridTemplateColumns: "repeat(3,1fr)",
-        marginTop: "1rem",
-      }}
-    >
+    <div className="options-container">
       <div onClick={() => props.setCurrentWord("Backspace")} className="btn">
         Backspace
       </div>
