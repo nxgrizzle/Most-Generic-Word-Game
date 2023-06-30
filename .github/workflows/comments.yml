@@ -1,31 +1,20 @@
-name: PR Comment
-on:
-  pull_request_review:
-    types: [submitted]
+action, then add the following to it:
 
+name: Auto Comment
+on: [issues, pull_request]
 jobs:
-  comment:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - name: Comment on PR
-        uses: actions/github-script@v3
+      - uses: wow-actions/auto-comment@v1
         with:
-          github-token: ${{secrets.GH_TOKEN}}
-          script: |
-            const { owner, repo, number: issue_number } = context.issue;
-            const author = context.payload.pull_request.user.login;
-            if (context.payload.review.state === 'approved') {
-              github.issues.createComment({
-                owner,
-                repo,
-                issue_number,
-                body: `@${author}, your PR has been approved.`
-              });
-            } else if (context.payload.review.state === 'changes_requested') {
-              github.issues.createComment({
-                owner,
-                repo,
-                issue_number,
-                body: `@${author}, changes have been requested for your PR.`
-              });
-            }
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          issuesOpened: |
+            👋 @{{ author }}
+            Thank you for raising an issue. We will will investigate into the matter and get back to you as soon as possible.
+            Please make sure you have given us as much context as possible.
+
+          pullRequestOpened: |
+            👋 @{{ author }}
+            Thank you for raising your pull request.
+            Please make sure you have followed our contributing guidelines. We will review it as soon as possible
