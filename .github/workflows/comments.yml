@@ -1,18 +1,23 @@
-name: Auto Comment
-on: [issues, pull_request]
+name: PR Review Requested
+on:
+  pull_request_review:
+    types: [review_requested]
 jobs:
-  run:
+  comment:
     runs-on: ubuntu-latest
     steps:
-      - uses: wow-actions/auto-comment@v1
+      - name: Comment on PR
+        uses: actions/github-script@v3
         with:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          issuesOpened: |
-            👋 @{{ author }}
-            Thank you for raising an issue. We will will investigate into the matter and get back to you as soon as possible.
-            Please make sure you have given us as much context as possible.
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { owner, repo, number: issue_number } = context.issue;
+            const author = context.payload.pull_request.user.login;
+            const reviewers = context.payload.pull_request.requested_reviewers.map(user => '@' + user.login);
 
-          pullRequestOpened: |
-            👋 @{{ author }}
-            Thank you for raising your pull request.
-            Please make sure you have followed our contributing guidelines. We will review it as soon as possible
+            github.issues.createComment({
+              owner,
+              repo,
+              issue_number,
+              body: `@${author} has requested a review. Reviewers: ${reviewers.join(", ")}`
+            });
