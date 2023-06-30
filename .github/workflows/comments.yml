@@ -19,5 +19,5 @@ jobs:
               owner,
               repo,
               issue_number,
-              body: `@${author} has requested a review. Reviewers: ${reviewers.join(", ")}`
+              body: `@${author} has     requested a review. Reviewers: ${reviewers.join(", ")}`
             });
