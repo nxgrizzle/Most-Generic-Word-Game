@@ -1,5 +1,3 @@
-action, then add the following to it:
-
 name: Auto Comment
 on: [issues, pull_request]
 jobs:
