@@ -2,7 +2,6 @@ name: PR Review Requested
 on:
   pull_request_review:
     types: [review_requested]
-
 jobs:
   comment:
     runs-on: ubuntu-latest
